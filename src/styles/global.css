@@ -1,0 +1,42 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+  }
+  
+  h1, h2, h3 {
+    color: #2c3e50;
+    text-align: center;
+  }
+  
+  .v-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .v-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .v-btn {
+    text-transform: none;
+    border-radius: 20px;
+  }
+  
+  .v-btn-toggle .v-btn {
+    background: #eee;
+    color: #333;
+    border-radius: 20px;
+    margin: 0 4px;
+  }
+  
+  .v-btn-toggle .v-btn--active {
+    background: #4caf50;
+    color: #fff;
+  }
+  

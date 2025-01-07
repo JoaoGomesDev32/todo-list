@@ -1,159 +1,90 @@
 <template>
-    <VContainer class="my-4">
-        <v-card class="mx-auto pa-4" max-width="600" elevation="3">
-            <v-card-title class="text-h5">
-                Gerenciador de Tarefas
-            </v-card-title>
-            <v-card-text>
-                <v-form @submit.prevent="addTask" class="d-flex">
-                <v-text-field
-                    v-model="newTask"
-                    label="Nova Tarefa"
-                    variant="outlined"
-                    class="flex-grow-1 mr-2"
-                    required
-                ></v-text-field>
-                <v-btn type="submit" color="primary" :disabled="!newTask">
-                    <v-icon left>mdi-plus</v-icon> Adicionar
-                </v-btn>
-                </v-form>
-        
-                <!-- Filtro de Tarefas -->
-                <v-card class="mx-auto mt-4 pa-3" max-width="600" elevation="3">
-                    <v-btn-toggle v-model="filter" color="primary">
-                    <v-btn value="all">Todas</v-btn>
-                    <v-btn value="completed">Concluídas</v-btn>
-                    <v-btn value="pending">Pendentes</v-btn>
-                    </v-btn-toggle>
-                </v-card>
-        
-                <!-- Lista de Tarefas -->
-                <v-card class="mx-auto mt-4 pa-4" max-width="600" elevation="3">
-                    <v-list>
-                    <v-list-item
-                        v-for="(task, index) in filteredTasks"
-                        :key="index"
-                        class="d-flex align-center"
-                    >
-                        <v-list-item-content>
-                            <v-checkbox
-                                v-model="task.completed"
-                                @change="toggleTask(index)"
-                                color="primary"
-                            >
-                                <template v-slot:label>
-                                    <s v-if="task.completed">{{ task.text }}</s>
-                                    <span v-else>{{ task.text }}</span>
-                                </template>
-                            </v-checkbox>
-                        <!-- <s v-if="task.completed">{{ task.text }}</s>
-                        <span v-else>{{ task.text }}</span> -->
-                        </v-list-item-content>
-                        <v-list-item-action>
-                        <v-tooltip bottom>
-                            <template #activator="{ on, attrs }">
-                            <v-btn icon v-bind="attrs" v-on="on" @click="toggleTask(index)">
-                                <v-icon>
-                                {{ task.completed ? 'mdi-check-circle-outline' : 'mdi-circle-outline' }}
-                                </v-icon>
-                            </v-btn>
-                            </template>
-                            <span>
-                            {{ task.completed ? 'Marcar como não concluída' : 'Marcar como concluída' }}
-                            </span>
-                        </v-tooltip>
-            
-                        <v-tooltip bottom>
-                            <template #activator="{ on, attrs }">
-                            <v-btn icon v-bind="attrs" v-on="on" @click="deleteTask(index)">
-                                <v-icon color="red">mdi-delete</v-icon>
-                            </v-btn>
-                            </template>
-                            <span>Excluir Tarefa</span>
-                        </v-tooltip>
-                        </v-list-item-action>
-                    </v-list-item>
-                    </v-list>
-                </v-card>
-            </v-card-text>
+  <v-container>
+    <!-- Título -->
+    <v-card-title class="text-h4 text-center mb-4" style="font-weight: bold;">Minha To-Do List</v-card-title>
+
+    <!-- Formulário -->
+    <v-form @submit.prevent="addTask" class="d-flex mb-4">
+      <v-text-field
+        v-model="newTask"
+        label="Adicione uma nova tarefa"
+        outlined
+        class="flex-grow-1 mr-2"
+      ></v-text-field>
+      <v-btn type="submit" color="primary" :disabled="!newTask">
+        <v-icon left>mdi-plus</v-icon> Adicionar
+      </v-btn>
+    </v-form>
+
+    <!-- Lista de Tarefas -->
+    <v-list>
+      <v-slide-y-transition group>
+        <v-card
+          v-for="(task, index) in filteredTasks"
+          :key="index"
+          class="pa-2 mb-3 d-flex align-center"
+          style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"
+        >
+          <!-- Checkbox para concluir -->
+          <v-checkbox
+            v-model="task.completed"
+            color="success"
+            class="mr-3"
+            :aria-label="`Marcar ${task.text} como concluída`"
+          ></v-checkbox>
+
+          <!-- Texto da tarefa -->
+          <v-list-item-content>
+            <span :style="{ textDecoration: task.completed ? 'line-through' : 'none', fontSize: '16px' }">
+              {{ task.text }}
+            </span>
+          </v-list-item-content>
+
+          <!-- Botão de excluir -->
+          <v-btn
+            icon
+            color="error"
+            @click="deleteTask(index)"
+            :aria-label="`Excluir ${task.text}`"
+          >
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
         </v-card>
-    </VContainer>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, watch } from 'vue';
-  
-  interface Task {
-    text: string;
-    completed: boolean;
+      </v-slide-y-transition>
+    </v-list>
+    <v-btn-toggle v-model="filter" color="primary" class="mb-4 justify-center">
+      <v-btn value="all">Todas</v-btn>
+      <v-btn value="completed">Concluídas</v-btn>
+      <v-btn value="pending">Pendentes</v-btn>
+    </v-btn-toggle>
+
+  </v-container>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+
+const newTask = ref('');
+const tasks = ref<{ text: string; completed: boolean }[]>([]);
+
+// Adicionar tarefa
+const addTask = () => {
+  if (newTask.value) {
+    tasks.value.push({ text: newTask.value, completed: false });
+    newTask.value = '';
   }
-  
-  export default defineComponent({
-    name: 'ToDoList',
-    setup() {
-      const tasks = ref<Task[]>([]);
-      const newTask = ref('');
-      const filter = ref<'all' | 'completed' | 'pending'>('all'); // Filtro selecionado
-  
-      const saveTasksToLocalStorage = () => {
-        localStorage.setItem('tasks', JSON.stringify(tasks.value));
-      };
-  
-      const loadTasksFromLocalStorage = () => {
-        const savedTasks = localStorage.getItem('tasks');
-        if (savedTasks) {
-          tasks.value = JSON.parse(savedTasks);
-        }
-      };
-  
-      const addTask = () => {
-        if (newTask.value.trim()) {
-          tasks.value.push({ text: newTask.value, completed: false });
-          newTask.value = '';
-        }
-      };
-  
-      const toggleTask = (index: number) => {
-        tasks.value[index].completed = !tasks.value[index].completed;
-      };
-  
-      const deleteTask = (index: number) => {
-        tasks.value.splice(index, 1);
-      };
-  
-      // Computed para obter as tarefas filtradas
-      const filteredTasks = computed(() => {
-        if (filter.value === 'completed') {
-          return tasks.value.filter((task) => task.completed);
-        } else if (filter.value === 'pending') {
-          return tasks.value.filter((task) => !task.completed);
-        }
-        return tasks.value;
-      });
-  
-      onMounted(() => {
-        loadTasksFromLocalStorage();
-      });
-  
-      watch(tasks, saveTasksToLocalStorage, { deep: true });
-  
-      return {
-        tasks,
-        newTask,
-        addTask,
-        toggleTask,
-        deleteTask,
-        filter,
-        filteredTasks,
-      };
-    },
-  });
-  </script>
-  
-  <style scoped>
-  s {
-    color: gray;
-    text-decoration: line-through;
-  }
-  </style>
-  
+};
+
+// Deletar tarefa
+const deleteTask = (index: number) => {
+  tasks.value.splice(index, 1);
+};
+
+// Filtros de tarefas
+const filter = ref('all');
+const filteredTasks = computed(() => {
+  if (filter.value === 'completed') return tasks.value.filter(task => task.completed);
+  if (filter.value === 'pending') return tasks.value.filter(task => !task.completed);
+  return tasks.value;
+});
+</script>

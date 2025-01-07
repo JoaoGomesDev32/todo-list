@@ -1,34 +1,28 @@
-// Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
-
-// Vuetify
-import { createVuetify } from 'vuetify'
-import { aliases, mdi } from 'vuetify/iconsets/mdi';
+import { createApp } from 'vue';
+import App from './App.vue';
+import { createVuetify } from 'vuetify';
+import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/styles';
 
 const vuetify = createVuetify({
   theme: {
+    defaultTheme: 'dark',
     themes: {
-      light: {
+      dark: {
+        dark: true,
         colors: {
-          primary: '#6200ea', // Roxo moderno
-          secondary: '#03dac6', // Verde água
-          error: '#b00020',
-          background: '#f9f9f9', // Fundo claro
-          surface: '#ffffff',
+          background: '#212529',
+          surface: '#1c1e21',
+          primary: '#28a745',
+          secondary: '#6c757d',
+          success: '#4caf50',
+          error: '#ff5252',
+          warning: '#ffc107',
+          info: '#2196f3',
         },
       },
     },
   },
-  icons: {
-    defaultSet: 'mdi',
-    aliases,
-    sets: { mdi },
-  },
 });
 
-export default vuetify;
-
-
-
-
+createApp(App).use(vuetify).mount('#app');
