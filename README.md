@@ -4,9 +4,7 @@ Uma aplicação web simples e funcional para gerenciar tarefas, desenvolvida uti
 
 ## 📸 Screenshot
 
-<div style="text-align: center;">
-    <img src="/src/assets/img/screenshot.png" alt="Screenshot da Aplicação" width="600">
-</div>
+<img src="/src/assets/img/screenshot.png" alt="Screenshot da Aplicação" width="300" heigth="500">
 
 ## 📋 Funcionalidades
 
