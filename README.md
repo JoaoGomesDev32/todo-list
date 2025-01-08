@@ -2,6 +2,10 @@
 
 Uma aplicação web simples e funcional para gerenciar tarefas, desenvolvida utilizando Vue 3, TypeScript e Vuetify. A aplicação permite adicionar, marcar como concluídas e remover tarefas, além de filtrar por status (todas, concluídas ou pendentes). Tudo isso com um tema visual moderno e responsivo.
 
+## 📸 Screenshot
+
+![Screenshot da Aplicação](./assets/screenshot.png)
+
 ## 📋 Funcionalidades
 
 - **Adicionar tarefas:** Inclua novas tarefas na lista de maneira simples.

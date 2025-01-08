@@ -19,7 +19,7 @@
 
       <!-- Footer -->
       <footer class="app-footer">
-        Desenvolvido por João Gomes © 2025
+        Desenvolvido por João Silva © 2025
       </footer>
     </div>
   </v-app>
